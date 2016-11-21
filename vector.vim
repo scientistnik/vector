@@ -15,11 +15,13 @@ function! Vector(how)
 		let msg = VectorMethod()
 		" line 2 have methods ?
 		" last line have "," ?
-		echom msg
+		let msg = substitute(msg, ".create",".recreate","").split("\n")
+		echom msg[1]
 		return
 	endif
 
 	" first line have .create ?
+	msg = substitute(msg, ".create",".recreate","")
 	call VectorSend(g:vector_ip, g:vector_port, msg)
 endfunction
 
@@ -60,7 +62,7 @@ vim.command('let sline = ' + str(sline+1))
 vim.command('normal ]}')
 cline = window.cursor[0]-1
 if cline == oline:
-	print("Dont found stop nethod")
+	print("Dont found stop method")
 
 line = buffer[cline]
 oline = cline
@@ -78,6 +80,9 @@ while re.match(r'^\t*},?',line) == None:
 
 eline = cline
 vim.command('let eline = ' + str(eline+1))
+
+window.cursor = cursor
+
 EOF
 let msg = getline(1) . "\n". join(getline(sline,eline),"\n")
 return msg
